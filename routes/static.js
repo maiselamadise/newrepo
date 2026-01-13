@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Static Routes
 // Index route
-app.get("/", function(req, res) {
+express.application.get("/", function(req, res) {
     res.render("index", { title: "Home" })
 })
 // Set up "public" folder / subfolders for static files
