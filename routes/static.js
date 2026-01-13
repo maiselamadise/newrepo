@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 // Static Routes
+
 // Index route
 express.application.get("/", function(req, res) {
     res.render("index", { title: "Home" })
