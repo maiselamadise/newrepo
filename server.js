@@ -41,3 +41,27 @@ const host = process.env.HOST
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
+
+app.use(require("./utilities/error-handlers"))
+
+const express = require("express")
+const app = express()
+
+app.set("view engine", "ejs")
+
+app.use(require("./routes/inventoryRoute"))
+app.use(require("./routes/errorRoute"))
+
+// 404 handler
+app.use((req, res, next) => {
+  const err = new Error("Page Not Found")
+  err.status = 404
+  next(err)
+})
+
+// Global error middleware (LAST)
+app.use(require("./utilities/error-handler"))
+
+app.listen(3000, () => {
+  console.log("App running on port 3000")
+})

@@ -169,3 +169,31 @@ footer a {
     justify-content: space-between;
   }
 }
+
+.vehicle-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.vehicle-image img {
+  width: 100%;
+  height: auto;
+}
+
+.vehicle-info {
+  font-size: 1.1rem;
+}
+
+.price {
+  font-size: 1.3rem;
+  color: #0a4;
+}
+
+@media (max-width: 768px) {
+  .vehicle-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
