@@ -1,6 +1,5 @@
 /* ******************************************
- * This server.js file is the primary file of the 
- * application. It is used to control the project.
+ * Primary application file (server.js)
  *******************************************/
 
 /* ***********************
@@ -9,59 +8,56 @@
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
 require("dotenv").config()
+
 const app = express()
+
+// Routes
 const staticRoutes = require("./routes/static")
+const inventoryRoutes = require("./routes/inventoryRoute")
 
 /* ***********************
- * View Engine and Templates
+ * View Engine & Layouts
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout") // not at views root
+app.set("layout", "./layouts/layout")
+
+/* ***********************
+ * Middleware
+ *************************/
+app.use(express.static("public"))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 /* ***********************
  * Routes
  *************************/
 app.use(staticRoutes)
-
-app.get("/", (req, res) => {
-  res.render("index", { title: "Home" })
-})
+app.use(inventoryRoutes)
 
 /* ***********************
- * Local Server Information
- * Values from .env (environment) file
+ * 404 Handler
  *************************/
-const port = process.env.PORT
-const host = process.env.HOST
-
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
-
-app.use(require("./utilities/error-handlers"))
-
-const express = require("express")
-const app = express()
-
-app.set("view engine", "ejs")
-
-app.use(require("./routes/inventoryRoute"))
-app.use(require("./routes/errorRoute"))
-
-// 404 handler
 app.use((req, res, next) => {
   const err = new Error("Page Not Found")
   err.status = 404
   next(err)
 })
 
-// Global error middleware (LAST)
+/* ***********************
+ * Global Error Handler (LAST)
+ *************************/
 app.use(require("./utilities/error-handler"))
 
-app.listen(3000, () => {
-  console.log("App running on port 3000")
+/* ***********************
+ * Server Info
+ *************************/
+const port = process.env.PORT || 3000
+const host = process.env.HOST || "localhost"
+
+/* ***********************
+ * Start Server
+ *************************/
+app.listen(port, () => {
+  console.log(`App running at http://${host}:${port}`)
 })
