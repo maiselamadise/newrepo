@@ -1,3 +1,7 @@
+/******************************************
+ * Utilities Index
+ ******************************************/
+
 const utilities = {}
 
 /* ****************************************
@@ -17,7 +21,7 @@ utilities.buildVehicleDetail = function (vehicle) {
     <section class="vehicle-detail">
       <div class="vehicle-image">
         <img src="${vehicle.inv_image}"
-             alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}">
+             alt="Image of ${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}">
       </div>
 
       <div class="vehicle-info">
