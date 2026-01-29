@@ -171,29 +171,24 @@ footer a {
 }
 
 .vehicle-detail {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .vehicle-image img {
-  width: 100%;
+  max-width: 100%;
   height: auto;
 }
 
 .vehicle-info {
-  font-size: 1.1rem;
-}
-
-.price {
-  font-size: 1.3rem;
-  color: #0a4;
+  flex: 1;
+  min-width: 300px;
 }
 
 @media (max-width: 768px) {
   .vehicle-detail {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
 
