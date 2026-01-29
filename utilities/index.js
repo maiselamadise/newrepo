@@ -23,4 +23,4 @@ function buildVehicleDetailHTML(vehicle) {
   `;
 }
 
-module.exports = { buildVehicleDetailHTML };
+module.exports = { utilities: { buildVehicleDetailHTML } };
