@@ -15,6 +15,9 @@ const app = express()
 const staticRoutes = require("./routes/static")
 const inventoryRoutes = require("./routes/inventoryRoute")
 
+// Error Handler
+const errorHandler = require("./middleware/errorHandler")
+
 /* ***********************
  * View Engine & Layouts
  *************************/
@@ -47,7 +50,7 @@ app.use((req, res, next) => {
 /* ***********************
  * Global Error Handler (LAST)
  *************************/
-app.use(require("./utilities/error-handler"))
+app.use(errorHandler)
 
 /* ***********************
  * Server Info
@@ -61,3 +64,5 @@ const host = process.env.HOST || "localhost"
 app.listen(port, () => {
   console.log(`App running at http://${host}:${port}`)
 })
+
+module.exports = app
