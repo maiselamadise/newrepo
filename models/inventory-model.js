@@ -1,5 +1,7 @@
 const pool = require("../database/")
 
+async function getClassificationId () {return await pool.query(`SELECT classification_id, classification_name FROM public.classification ORDER BY classification_name`);}
+
 /* ****************************************
  * Get vehicle by inventory ID
  * *************************************** */
