@@ -1,76 +1,41 @@
-const { body, validationResult } = require("express-validator")
+// src/utilities/inventory-validation.js
 
-/* **********************************
- * Inventory validation rules
- * ********************************* */
-const inventoryRules = () => {
-  return [
-    body("inv_make")
-      .trim()
-      .notEmpty()
-      .withMessage("Make is required."),
+/**
+ * Validate inventory item input
+ * @param {Object} item - The inventory item object
+ * @param {string} item.name - Name of the item
+ * @param {string} item.description - Description of the item
+ * @param {number} item.price - Price of the item
+ * @param {number} item.quantity - Quantity in stock
+ * @returns {Object} result - { isValid: boolean, errors: string[] }
+ */
+function validateInventory(item) {
+  const errors = [];
 
-    body("inv_model")
-      .trim()
-      .notEmpty()
-      .withMessage("Model is required."),
-
-    body("inv_year")
-      .isInt({ min: 1900, max: new Date().getFullYear() + 1 })
-      .withMessage("Year must be a valid number."),
-
-    body("inv_description")
-      .trim()
-      .notEmpty()
-      .withMessage("Description is required."),
-
-    body("inv_image")
-      .trim()
-      .notEmpty()
-      .withMessage("Image path is required."),
-
-    body("inv_thumbnail")
-      .trim()
-      .notEmpty()
-      .withMessage("Thumbnail path is required."),
-
-    body("inv_price")
-      .isFloat({ min: 0 })
-      .withMessage("Price must be a valid number."),
-
-    body("inv_miles")
-      .isInt({ min: 0 })
-      .withMessage("Miles must be a valid number."),
-
-    body("classification_id")
-      .isInt()
-      .withMessage("Classification is required.")
-  ]
-}
-
-/* **********************************
- * Check validation results
- * ********************************* */
-const checkInventoryData = async (req, res, next) => {
-  const { errors } = validationResult(req)
-
-  if (!errors.length) {
-    return next()
+  // Name validation
+  if (!item.name || typeof item.name !== "string" || item.name.trim().length < 2) {
+    errors.push("Item name must be at least 2 characters long.");
   }
 
-  // Rebuild page with errors
-  const utilities = require(".")
-  const nav = await utilities.getNav()
+  // Description validation
+  if (!item.description || typeof item.description !== "string") {
+    errors.push("Item description is required.");
+  }
 
-  res.render("inventory/add-inventory", {
-    title: "Add Inventory",
-    nav,
-    errors,
-    ...req.body
-  })
+  // Price validation
+  if (typeof item.price !== "number" || item.price <= 0) {
+    errors.push("Price must be a positive number.");
+  }
+
+  // Quantity validation
+  if (!Number.isInteger(item.quantity) || item.quantity < 0) {
+    errors.push("Quantity must be a non-negative integer.");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
 }
 
-module.exports = {
-  inventoryRules,
-  checkInventoryData
-}
+module.exports = { validateInventory };
