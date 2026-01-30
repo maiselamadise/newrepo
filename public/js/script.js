@@ -1,1 +1,12 @@
-console.log("Client-side JS loaded");
+console.log("Client-side JS loaded");const pswdBtn = document.querySelector("#pswdBtn");
+pswdBtn.addEventListener("click", function () {
+  const pswdInput = document.getElementById("pwd");
+  const type = pswdInput.getAttribute("type");
+  if (type == "password") {
+    pswdInput.setAttribute("type", "text");
+    pswdBtn.innerHTML = "Hide Password";
+  } else {
+    pswdInput.setAttribute("type", "password");
+    pswdBtn.innerHTML = "Show Password";
+  }
+});

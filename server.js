@@ -1,74 +1,123 @@
-/* ******************************************
- * Primary application file (server.js)
- *******************************************/
 
+/* ******************************************
+ * This server.js file is the primary file of the 
+ * application. It is used to control the project.
+ *******************************************/
 /* ***********************
  * Require Statements
  *************************/
 const express = require("express")
 const expressLayouts = require("express-ejs-layouts")
-require("dotenv").config()
-
+const env = require("dotenv").config()
+const static = require("./routes/static")
+const baseController = require("./controllers/baseController")
+const utilities = require("./utilities/")
+const inventoryRoute = require("./routes/inventoryRoute")
+const accountRoute = require("./routes/accountRoute")
+const session = require("express-session")
+const pool = require('./database/')
+const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 const app = express()
 
 /* ***********************
- * Routes
- *************************/
-const staticRoutes = require("./routes/static")
-const inventoryRoutes = require("./routes/inventoryRoute")
-const errorRoute = require("./routes/errorRoute")
-
-/* ***********************
- * Error Handler
- *************************/
-const errorHandler = require("./middleware/errorHandler")
-
-/* ***********************
- * View Engine & Layouts
+ * View Engine and Templates
  *************************/
 app.set("view engine", "ejs")
 app.use(expressLayouts)
-app.set("layout", "./layouts/layout")
+app.set("layout", "./layouts/layout") // not at views root
+
+
 
 /* ***********************
  * Middleware
+ * ************************/
+app.use(session({
+  store: new(require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+}),
+secret: process.env.SESSION_SECRET,
+resave: true,
+saveUninitialized: true,
+name: 'sessionId',
+}))
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next) {
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded 
+app.use(cookieParser())
+app.use(utilities.checkJWTToken)
+/* ***********************
+ * Routes
+ *************************/
+app.use(static)
+//app.get("/", baseController.buildHome)
+app.get("/", utilities.handleErrors(baseController.buildHome))
+
+/* ***********************
+ * Routes with Error Handling
  *************************/
 app.use(express.static("public"))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+
+// Inventory routes
+//app.use("/inv", inventoryRoute)
+app.use("/inv", require("./routes/inventoryRoute"))
+
+
+// Account routes 
+//app.use("/account", accountRoute)
+app.use("/account", require("./routes/accountRoute"))
+
+
+// // 404 Error Handler - must be after all other routes
+// app.use((req, res, next) => {
+//   const error = new Error(`Page not found: ${req.originalUrl}`)
+//   error.status = 404
+//   next(error)
+// })
 
 /* ***********************
- * Routes (IMPORTANT ORDER)
+ * Global Error Handling Middleware (Task 2)
  *************************/
-app.use("/", staticRoutes)          // Home & static pages
-app.use("/inv", inventoryRoutes)    // Inventory routes
-app.use("/error", errorRoute)       // Intentional 500 error route
+app.use(async (err, req, res, next) => {
+  console.error("Error occurred:", err.stack)
 
-/* ***********************
- * 404 Handler
- *************************/
-app.use((req, res, next) => {
-  const err = new Error("Page Not Found")
-  err.status = 404
-  next(err)
+  let nav = ""
+  try {
+    nav = await utilities.getNav()
+  } catch (navError) {
+    console.error("Error getting navigation:", navError)
+    nav = "<ul><li><a href='/'>Home</a></li></ul>"
+  }
+
+  const status = err.status || 500
+  const message = err.message || "Something went wrong. Please try again later."
+
+  res.status(status).render("errors/error", {
+    title: `Error ${status}`,
+    nav: nav,
+    message: message,
+    status: status,
+    layout: "./layouts/layout",
+  })
 })
 
 /* ***********************
- * Global Error Handler (LAST)
+ * Local Server Information
+ * Values from .env (environment) file
  *************************/
-app.use(errorHandler)
+const port = process.env.PORT
+const host = process.env.HOST
 
 /* ***********************
- * Server Info
+ * Log statement to confirm server operation
  *************************/
-const port = process.env.PORT || 3000
-const host = process.env.HOST || "localhost"
-
-/* ***********************
- * Start Server
- *************************/
-app.listen(port, host, () => {
-  console.log(`App running at http://${host}:${port}`)
+app.listen(port, () => {
+  console.log(`app listening on ${host}:${port}`)
 })
-
-module.exports = app
