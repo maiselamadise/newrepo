@@ -1,10 +1,15 @@
-// utilities/index.js
+function handleErrors(fn) {
+  return (req, res, next) => {
+    Promise.resolve(fn(req, res, next)).catch(next)
+  }
+}
+
 function buildVehicleDetailHTML(vehicle) {
   const priceFormatted = vehicle.price.toLocaleString("en-US", {
     style: "currency",
     currency: "USD"
-  });
-  const mileageFormatted = vehicle.miles.toLocaleString("en-US");
+  })
+  const mileageFormatted = vehicle.miles.toLocaleString("en-US")
 
   return `
     <section class="vehicle-detail">
@@ -20,7 +25,10 @@ function buildVehicleDetailHTML(vehicle) {
         <p><strong>Classification:</strong> ${vehicle.classification_name}</p>
       </div>
     </section>
-  `;
+  `
 }
 
-module.exports = { utilities: { buildVehicleDetailHTML } };
+module.exports = {
+  handleErrors,
+  buildVehicleDetailHTML
+}
