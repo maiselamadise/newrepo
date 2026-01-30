@@ -1,12 +1,11 @@
 const express = require("express")
-const router = new express.Router()
+const router = express.Router()
 const utilities = require("../utilities")
+const errorController = require("../controllers/errorController")
 
 router.get(
   "/trigger-error",
-  utilities.handleErrors(async () => {
-    throw new Error("Intentional 500 Error")
-  })
+  utilities.handleErrors(errorController.triggerError)
 )
 
 module.exports = router

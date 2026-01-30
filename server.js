@@ -16,6 +16,7 @@ const app = express()
  *************************/
 const staticRoutes = require("./routes/static")
 const inventoryRoutes = require("./routes/inventoryRoute")
+const errorRoute = require("./routes/errorRoute")
 
 /* ***********************
  * Error Handler
@@ -39,8 +40,9 @@ app.use(express.json())
 /* ***********************
  * Routes (IMPORTANT ORDER)
  *************************/
-app.use("/", staticRoutes)          // Home, static pages
-app.use("/inv", inventoryRoutes)    // Inventory-related routes
+app.use("/", staticRoutes)          // Home & static pages
+app.use("/inv", inventoryRoutes)    // Inventory routes
+app.use("/error", errorRoute)       // Intentional 500 error route
 
 /* ***********************
  * 404 Handler
@@ -65,7 +67,7 @@ const host = process.env.HOST || "localhost"
 /* ***********************
  * Start Server
  *************************/
-app.listen(port, () => {
+app.listen(port, host, () => {
   console.log(`App running at http://${host}:${port}`)
 })
 

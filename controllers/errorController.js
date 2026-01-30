@@ -1,9 +1,7 @@
-// controllers/errorController.js
-exports.triggerError = (req, res, next) => {
-  try {
-    throw new Error("Intentional 500 error for testing");
-  } catch (err) {
-    err.status = 500;
-    next(err);
-  }
-};
+const errorController = {}
+
+errorController.triggerError = async function (req, res, next) {
+  throw new Error("Intentional 500 error for testing")
+}
+
+module.exports = errorController
