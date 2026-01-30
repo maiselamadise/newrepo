@@ -11,6 +11,21 @@ function buildVehicleDetailHTML(vehicle) {
   })
   const mileageFormatted = vehicle.miles.toLocaleString("en-US")
 
+  // utilities/index.js
+
+function handleErrors(controller) {
+  return async (req, res, next) => {
+    try {
+      await controller(req, res, next);
+    } catch (err) {
+      next(err); // Pass error to middleware/errorHandler.js
+    }
+  };
+}
+
+module.exports = { handleErrors };
+
+
   return `
     <section class="vehicle-detail">
       <div class="vehicle-image">
@@ -31,4 +46,4 @@ function buildVehicleDetailHTML(vehicle) {
 module.exports = {
   handleErrors,
   buildVehicleDetailHTML
-}
+};
