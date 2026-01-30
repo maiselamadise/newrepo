@@ -11,11 +11,15 @@ require("dotenv").config()
 
 const app = express()
 
-// Routes
+/* ***********************
+ * Routes
+ *************************/
 const staticRoutes = require("./routes/static")
 const inventoryRoutes = require("./routes/inventoryRoute")
 
-// Error Handler
+/* ***********************
+ * Error Handler
+ *************************/
 const errorHandler = require("./middleware/errorHandler")
 
 /* ***********************
@@ -33,10 +37,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 /* ***********************
- * Routes
+ * Routes (IMPORTANT ORDER)
  *************************/
-app.use(staticRoutes)
-app.use(inventoryRoutes)
+app.use("/", staticRoutes)          // Home, static pages
+app.use("/inv", inventoryRoutes)    // Inventory-related routes
 
 /* ***********************
  * 404 Handler
