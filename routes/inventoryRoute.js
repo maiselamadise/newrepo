@@ -1,7 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const invController = require("../controllers/inventoryController");
+const express = require("express")
+const router = express.Router()
+const invController = require("../controllers/inventoryController")
 
-router.get("/detail/:id", invController.getVehicleDetail);
+router.get("/detail/:invId", invController.buildInventoryDetail)
 
-module.exports = router;
+module.exports = router
