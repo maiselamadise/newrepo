@@ -10,7 +10,7 @@ async function getClassifications() {
 /* ***************************
  *  Get all inventory items and classification_name by classification_id
  * ************************** */
-async function getInventoryByClassificationId(classification_id) {
+async function getVehicleById(id) {
   try {
     const data = await pool.query(
       `SELECT * FROM public.inventory AS i 
@@ -19,7 +19,7 @@ async function getInventoryByClassificationId(classification_id) {
       WHERE i.classification_id = $1`,
       [classification_id],
     )
-    return data.rows
+    return data.rows[0]
   } catch (error) {
     console.error("getInventoryByClassificationId error " + error)
     throw error
@@ -91,8 +91,7 @@ async function updateInventory(inv_id, classification_id, inv_make, inv_model, i
     throw error
   }
 }
-
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryById, addVehicleByClassificationName, addNewInventoryVehicle, updateInventory}
+module.exports = { getVehicleById };
 
 
 

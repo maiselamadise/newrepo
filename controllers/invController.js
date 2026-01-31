@@ -1,18 +1,20 @@
-// controllers/inventoryController.js
+const invModel = require("../models/inventory-model");
+const utilities = require("../utilities");
 
-async function buildInventoryDetail(req, res, next) {
-  const invId = req.params.invId;
+async function getVehicleDetail(req, res, next) {
+  try {
+    const vehicleId = parseInt(req.params.id);
+    const vehicleData = await invModel.getVehicleById(vehicleId);
 
-  // Example: fetch from DB (replace with your query)
-  const item = { id: invId, name: "Sample Item", price: 100 };
+    if (!vehicleData) {
+      return next({ status: 404, message: "Vehicle not found" });
+    }
 
-  if (!item) {
-    const error = new Error("Inventory item not found");
-    error.status = 404;
-    throw error;
+    const html = utilities.buildVehicleDetailHTML(vehicleData);
+    res.send(html);
+  } catch (error) {
+    next(error);
   }
-
-  res.json(item);
 }
 
-module.exports = { buildInventoryDetail };
+module.exports = { getVehicleDetail };
