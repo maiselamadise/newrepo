@@ -6,11 +6,15 @@ const Util = {}
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
+/* ************************
+ * Constructs the nav HTML unordered list (SAFE FALLBACK)
+ ************************** */
 Util.getNav = async () => {
+  let list = "<ul>"
+  list += '<li><a href="/" title="Home page">Home</a></li>'
+
   try {
     const data = await invModel.getClassifications()
-    let list = "<ul>"
-    list += '<li><a href="/" title="Home page">Home</a></li>'
 
     data.rows.forEach((row) => {
       list += "<li>"
@@ -24,14 +28,15 @@ Util.getNav = async () => {
         "</a>"
       list += "</li>"
     })
-
-    list += "</ul>"
-    return list
   } catch (error) {
-    console.error("getNav error:", error)
-    throw error
+    console.error("⚠️ getNav fallback activated:", error.message)
+    // DO NOT throw — allow page to load with Home link only
   }
+
+  list += "</ul>"
+  return list
 }
+
 
 /* **************************************
  * Build the classification view HTML
