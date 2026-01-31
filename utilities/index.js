@@ -4,9 +4,6 @@ require("dotenv").config()
 const Util = {}
 
 /* ************************
- * Constructs the nav HTML unordered list
- ************************** */
-/* ************************
  * Constructs the nav HTML unordered list (SAFE FALLBACK)
  ************************** */
 Util.getNav = async () => {
@@ -15,7 +12,6 @@ Util.getNav = async () => {
 
   try {
     const data = await invModel.getClassifications()
-
     data.rows.forEach((row) => {
       list += "<li>"
       list +=
@@ -30,17 +26,15 @@ Util.getNav = async () => {
     })
   } catch (error) {
     console.error("⚠️ getNav fallback activated:", error.message)
-    // DO NOT throw — allow page to load with Home link only
   }
 
   list += "</ul>"
   return list
 }
 
-
 /* **************************************
  * Build the classification view HTML
- * ************************************ */
+ ************************************* */
 Util.buildClassificationGrid = async (data) => {
   let grid = ""
 
@@ -95,60 +89,44 @@ Util.buildClassificationGrid = async (data) => {
 }
 
 /* ***************************
- * Build vehicle detail HTML (Task 1)
- * ************************** */
+ * Build vehicle detail HTML (Assignment 3)
+ ************************** */
 Util.buildVehicleDetailHTML = (vehicle) => {
   return `
     <div class="vehicle-detail-container">
       <div class="vehicle-image-section">
-        <img src="${vehicle.inv_image}" alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}" class="vehicle-detail-image">
+        <img 
+          src="${vehicle.inv_image}" 
+          alt="${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}" 
+          class="vehicle-detail-image">
       </div>
 
       <div class="vehicle-info-section">
-        <div class="vehicle-header">
-          <h1 class="vehicle-title">${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h1>
-          <div class="vehicle-price">$${new Intl.NumberFormat("en-US").format(vehicle.inv_price)}</div>
-        </div>
+        <h1 class="vehicle-title">
+          ${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}
+        </h1>
 
-        <div class="vehicle-specs">
-          <div class="spec-row">
-            <span class="spec-label">Year:</span>
-            <span class="spec-value">${vehicle.inv_year}</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Make:</span>
-            <span class="spec-value">${vehicle.inv_make}</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Model:</span>
-            <span class="spec-value">${vehicle.inv_model}</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Mileage:</span>
-            <span class="spec-value">${new Intl.NumberFormat("en-US").format(vehicle.inv_miles)} miles</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Color:</span>
-            <span class="spec-value">${vehicle.inv_color}</span>
-          </div>
-        </div>
+        <p class="vehicle-price">
+          $${new Intl.NumberFormat("en-US").format(vehicle.inv_price)}
+        </p>
 
-        <div class="vehicle-description">
-          <h3>Vehicle Description</h3>
-          <p>${vehicle.inv_description}</p>
-        </div>
+        <ul class="vehicle-specs">
+          <li><strong>Year:</strong> ${vehicle.inv_year}</li>
+          <li><strong>Make:</strong> ${vehicle.inv_make}</li>
+          <li><strong>Model:</strong> ${vehicle.inv_model}</li>
+          <li><strong>Mileage:</strong> ${new Intl.NumberFormat("en-US").format(vehicle.inv_miles)} miles</li>
+          <li><strong>Color:</strong> ${vehicle.inv_color}</li>
+        </ul>
 
-        <div class="vehicle-actions">
-          <button class="btn-contact">Contact Dealer</button>
-          <button class="btn-finance">Get Financing</button>
-        </div>
+        <h2>Description</h2>
+        <p>${vehicle.inv_description}</p>
       </div>
     </div>
   `
 }
 
 /* ************************
- * Error handling wrapper (Task 2)
+ * Error handling wrapper
  ************************** */
 Util.handleErrors = (fn) => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next)
@@ -200,7 +178,7 @@ Util.checkJWTToken = (req, res, next) => {
 
 /* ****************************************
  * Check Login
- * ************************************ */
+ *************************************** */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
@@ -211,8 +189,8 @@ Util.checkLogin = (req, res, next) => {
 }
 
 /* ****************************************
- * Middleware to check for Admin or Employee
- * **************************************** */
+ * Check Admin or Employee
+ **************************************** */
 Util.checkAccountType = (req, res, next) => {
   const accountData = res.locals.accountData
   const allowedRoles = ["Admin", "Employee"]

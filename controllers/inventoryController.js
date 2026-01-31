@@ -3,24 +3,30 @@ const utilities = require("../utilities")
 
 const invController = {}
 
+/* ****************************************
+ * Build vehicle detail view
+ **************************************** */
 invController.getVehicleDetail = async function (req, res, next) {
   try {
-    const inv_id = parseInt(req.params.id)
-    const vehicle = await invModel.getInventoryById(inv_id)
+    const invId = req.params.invId
+    const vehicle = await invModel.getInventoryById(invId)
 
     if (!vehicle) {
-      return next({ status: 404, message: "Vehicle not found" })
+      const err = new Error("Vehicle not found")
+      err.status = 404
+      throw err
     }
 
     const nav = await utilities.getNav()
+    const detailHTML = utilities.buildVehicleDetailHTML(vehicle)
 
     res.render("inventory/detail", {
       title: `${vehicle.inv_make} ${vehicle.inv_model}`,
       nav,
-      vehicle,
+      detailHTML,
     })
-  } catch (error) {
-    next(error)
+  } catch (err) {
+    next(err)
   }
 }
 
