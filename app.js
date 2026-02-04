@@ -1,21 +1,26 @@
-const express = require("express");
-const path = require("path");
-const app = express();
+// Home
+app.get("/", (req, res) => {
+  res.render("index"); // or sendFile if using static HTML
+});
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+// Vehicles
+app.get("/vehicles/custom", (req, res) => {
+  res.render("custom");
+});
 
-// Routes
-const inventoryRoutes = require("./routes/inventoryRoutes");
-const errorRoutes = require("./routes/errorRoutes");
+app.get("/vehicles/sedan", (req, res) => {
+  res.render("sedan");
+});
 
-app.use("/inventory", inventoryRoutes);
-app.use("/error", errorRoutes);
+app.get("/vehicles/suv", (req, res) => {
+  res.render("suv");
+});
 
-// Error handling middleware
-const handleErrors = require("./middleware/errorHandler");
-app.use(handleErrors);
+app.get("/vehicles/truck", (req, res) => {
+  res.render("truck");
+});
 
-module.exports = app;
+// Account
+app.get("/account/login", (req, res) => {
+  res.render("login");
+});

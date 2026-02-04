@@ -11,6 +11,7 @@ const session = require("express-session")
 const flash = require("connect-flash")
 const messages = require("express-messages")
 const cookieParser = require("cookie-parser")
+const utilities = require("./utilities/")
 require("dotenv").config()
 
 /* ***********************
@@ -91,17 +92,20 @@ app.use((req, res, next) => {
 /* ***********************
  * Error Handler Middleware
  *************************/
-app.use((err, req, res, next) => {
+app.use(async (err, req, res, next) => {
   console.error(err.stack)
+  const nav = await utilities.getNav()
+
   res.status(err.status || 500)
   res.render("errors/error", {
     title: err.status || 500,
     message: err.message,
+    nav,
   })
 })
 
 /* ***********************
- * Server Listener (RENDER SAFE)
+ * Server Listener
  *************************/
 const port = process.env.PORT || 3000
 app.listen(port, () => {
