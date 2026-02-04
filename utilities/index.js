@@ -44,12 +44,22 @@ function buildVehicleDetail(vehicle) {
   return Util.buildInventoryDetail(vehicle)
 }
 
+/* ****************************************
+ * Build navigation HTML (REQUIRED)
+ * **************************************** */
 async function getNav() {
-  // nav logic
+  return `
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/inventory">Inventory</a></li>
+      </ul>
+    </nav>
+  `
 }
 
 function buildClassificationGrid(data) {
-  // grid logic
+  return ""
 }
 
 module.exports = {
