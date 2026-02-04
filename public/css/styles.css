@@ -1,30 +1,124 @@
-body {
-  font-family: Arial, sans-serif;
+/* Reset and base styles */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-main {
-  padding: 20px;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: #222;
+  line-height: 1.6;
 }
 
-.vehicle-detail {
+/* Navigation bar */
+nav {
+  background: #111;
+  color: #fff;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
 }
 
-.vehicle-image {
-  max-width: 400px;
-  flex: 1;
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-.vehicle-info {
-  flex: 2;
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
 }
 
-@media (max-width: 768px) {
-  .vehicle-detail {
-    flex-direction: column;
-  }
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #00aaff;
+}
+
+/* Hero / Welcome section */
+.hero {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(to bottom, #eee, #fff);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero img {
+  max-width: 500px;
+  width: 100%;
+  margin: 2rem auto;
+  display: block;
+}
+
+.hero ul {
+  list-style: none;
+  margin: 1rem 0;
+}
+
+.hero ul li {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+/* Call-to-action button */
+button,
+.cta {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover,
+.cta:hover {
+  background: #0056b3;
+}
+
+/* Links below car image */
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.links a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+/* Background racing theme */
+body {
+  background-image: url('checkerboard.png'); /* replace with actual path */
+  background-repeat: repeat;
+  background-size: 100px 100px;
+}
+
+/* Footer or subtitle */
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
 }
