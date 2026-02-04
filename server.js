@@ -36,3 +36,16 @@ const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });
+
+const utilities = require("./utilities")
+
+app.use(async (err, req, res, next) => {
+  console.error(err.stack)
+  res.status(err.status || 500).render("errors/error", {
+    title: err.status || "Server Error",
+    nav: await utilities.getNav(),
+    message: err.message,
+  })
+})
+
+app.use("/error", require("./routes/errorRoute"))

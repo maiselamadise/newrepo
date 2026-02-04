@@ -1,26 +1,40 @@
-function buildVehicleDetailHTML(vehicle) {
-  const price = vehicle.price.toLocaleString("en-US", {
+const Util = {}
+
+/* ****************************************
+ *  Error handler wrapper
+ * **************************************** */
+Util.handleErrors = fn => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next)
+
+/* ****************************************
+ *  Build inventory detail HTML
+ * **************************************** */
+Util.buildInventoryDetail = function (vehicle) {
+  const price = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD"
-  });
-  const mileage = vehicle.miles.toLocaleString("en-US");
+    currency: "USD",
+  }).format(vehicle.inv_price)
+
+  const mileage = new Intl.NumberFormat("en-US").format(vehicle.inv_miles)
 
   return `
     <section class="vehicle-detail">
       <div class="vehicle-image">
-        <img src="${vehicle.image}" alt="Image of ${vehicle.make} ${vehicle.model}">
+        <img 
+          src="${vehicle.inv_image}" 
+          alt="Image of ${vehicle.inv_make} ${vehicle.inv_model}"
+        >
       </div>
+
       <div class="vehicle-info">
-        <h1>${vehicle.year} ${vehicle.make} ${vehicle.model}</h1>
-        <p><strong>Price:</strong> ${price}</p>
+        <h2>${vehicle.inv_year} ${vehicle.inv_make} ${vehicle.inv_model}</h2>
+        <p class="price">${price}</p>
         <p><strong>Mileage:</strong> ${mileage} miles</p>
-        <p><strong>Description:</strong> ${vehicle.description}</p>
-        <p><strong>Color:</strong> ${vehicle.color}</p>
-        <p><strong>Transmission:</strong> ${vehicle.transmission}</p>
-        <p><strong>Fuel Type:</strong> ${vehicle.fuel_type}</p>
+        <p><strong>Description:</strong> ${vehicle.inv_description}</p>
+        <p><strong>Color:</strong> ${vehicle.inv_color}</p>
       </div>
     </section>
-  `;
+  `
 }
 
-module.exports = { buildVehicleDetailHTML };
+module.exports = Util

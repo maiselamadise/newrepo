@@ -1,7 +1,12 @@
-const express = require("express");
-const router = express.Router();
-const errorController = require("../controllers/errorController");
+const express = require("express")
+const router = new express.Router()
+const utilities = require("../utilities")
 
-router.get("/trigger-error", errorController.throwError);
+router.get(
+  "/trigger-error",
+  utilities.handleErrors(async (req, res) => {
+    throw new Error("Intentional server error")
+  })
+)
 
-module.exports = router;
+module.exports = router
