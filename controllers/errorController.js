@@ -1,9 +1,9 @@
-function triggerError(req, res, next) {
+function throwError(req, res, next) {
   try {
-    throw new Error("Intentional 500 error triggered");
+    throw new Error("Intentional 500 error triggered!");
   } catch (error) {
     next(error);
   }
 }
 
-module.exports = { triggerError };
+module.exports = { throwError };
