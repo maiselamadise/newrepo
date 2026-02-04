@@ -1,13 +1,13 @@
 const Util = {}
 
 /* ****************************************
- *  Error handler wrapper
+ * Error handler wrapper
  * **************************************** */
 Util.handleErrors = fn => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next)
 
 /* ****************************************
- *  Build inventory detail HTML
+ * Build inventory detail HTML
  * **************************************** */
 Util.buildInventoryDetail = function (vehicle) {
   const price = new Intl.NumberFormat("en-US", {
@@ -37,4 +37,24 @@ Util.buildInventoryDetail = function (vehicle) {
   `
 }
 
-module.exports = Util
+/* ****************************************
+ * Alias for controller use
+ * **************************************** */
+function buildVehicleDetail(vehicle) {
+  return Util.buildInventoryDetail(vehicle)
+}
+
+async function getNav() {
+  // nav logic
+}
+
+function buildClassificationGrid(data) {
+  // grid logic
+}
+
+module.exports = {
+  getNav,
+  buildClassificationGrid,
+  buildVehicleDetail,
+  handleErrors: Util.handleErrors,
+}
