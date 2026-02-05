@@ -1,6 +1,7 @@
 require("dotenv").config()
 const express = require("express")
 const path = require("path")
+const baseController = require("./controllers/baseController")
 
 const app = express()
 
