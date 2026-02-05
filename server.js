@@ -24,6 +24,9 @@ app.set("views", path.join(__dirname, "views"))
 app.use("/", inventoryRoute)
 app.use("/", errorRoute)
 
+// Inventory routes
+app.use("/inv", inventoryRoute)
+
 // 404 handler
 app.use(async (req, res) => {
   res.status(404).render("error", {
