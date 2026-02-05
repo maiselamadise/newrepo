@@ -25,7 +25,7 @@ app.use("/", inventoryRoute)
 app.use("/", errorRoute)
 
 // 404 handler
-app.use(async (req, res, next) => {
+app.use(async (req, res) => {
   res.status(404).render("error", {
     title: "404 - Page Not Found",
     nav: await utilities.getNav(),
@@ -33,7 +33,7 @@ app.use(async (req, res, next) => {
   })
 })
 
-// Global error handler (ONLY ONE)
+// Global error handler
 app.use(async (err, req, res, next) => {
   console.error(err.stack)
 
