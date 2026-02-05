@@ -1,24 +1,26 @@
-const invModel = require("../models/inventory-model");
-const utilities = require("../utilities");
+const invModel = require("../models/inventory-model")
+const utilities = require("../utilities")
 
 async function buildDetailView(req, res, next) {
   try {
-    const invId = parseInt(req.params.invId);
-    const vehicleData = await invModel.getVehicleById(invId);
+    const invId = Number(req.params.invId)
+    const vehicleData = await invModel.getVehicleById(invId)
 
     if (!vehicleData) {
-      return next({ status: 404, message: "Vehicle not found" });
+      return next({ status: 404, message: "Vehicle not found" })
     }
 
-    const htmlContent = utilities.buildVehicleDetailHTML(vehicleData);
+    const nav = await utilities.getNav()
+    const htmlContent = utilities.buildInventoryDetail(vehicleData)
 
     res.render("inventory/detail", {
-      title: `${vehicleData.make} ${vehicleData.model}`,
-      content: htmlContent
-    });
+      title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
+      nav,
+      content: htmlContent,
+    })
   } catch (error) {
-    next(error);
+    next(error)
   }
 }
 
-module.exports = { buildDetailView };
+module.exports = { buildDetailView }

@@ -1,18 +1,19 @@
 const express = require("express")
-const router = new express.Router()
-const invController = require("../controllers/invController")
+const router = express.Router()
+
+const inventoryController = require("../controllers/inventoryController")
 const utilities = require("../utilities")
 
-// Classification view
+// HOME route (THIS WAS MISSING)
 router.get(
-  "/type/:classificationId",
-  utilities.handleErrors(invController.buildByClassificationId)
+  "/",
+  utilities.handleErrors(inventoryController.buildHome)
 )
 
-// Inventory detail view
+// Classification route
 router.get(
-  "/detail/:inv_id",
-  utilities.handleErrors(invController.buildInventoryDetail)
+  "/inventory/type/:classificationId",
+  utilities.handleErrors(inventoryController.buildByClassificationId)
 )
 
 module.exports = router
