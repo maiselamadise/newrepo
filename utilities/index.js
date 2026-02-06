@@ -1,22 +1,23 @@
+// 1️⃣ Requires FIRST
 const invModel = require("../models/inventory-model")
 
-const utilities = {}
+// 2️⃣ Declare Util BEFORE using it
+const Util = {}
 
 /* ****************************************
  * Error handler wrapper
  * **************************************** */
-utilities.handleErrors = fn => (req, res, next) => {
+Util.handleErrors = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next)
 }
 
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
-utilities.getNav = async function () {
+Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications()
   let list = "<ul>"
   list += '<li><a href="/" title="Home page">Home</a></li>'
-
   data.rows.forEach((row) => {
     list += "<li>"
     list +=
@@ -29,16 +30,15 @@ utilities.getNav = async function () {
       "</a>"
     list += "</li>"
   })
-
   list += "</ul>"
   return list
 }
 
-/* ************************************
- * Build the classification grid HTML
- ************************************ */
-utilities.buildClassificationGrid = async function (data) {
-  let grid
+/* **************************************
+ * Build the classification view HTML
+ * ************************************ */
+Util.buildClassificationGrid = async function (data) {
+  let grid = ""
   if (data.length > 0) {
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => {
@@ -67,4 +67,5 @@ utilities.buildClassificationGrid = async function (data) {
   return grid
 }
 
-module.exports = utilities
+// 3️⃣ Export LAST
+module.exports = Util

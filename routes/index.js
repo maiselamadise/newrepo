@@ -1,2 +1,3 @@
-// Index route
-application.get("/", baseController.buildHome);
+// Index route 
+app.get("/", baseController.buildHome)
+
