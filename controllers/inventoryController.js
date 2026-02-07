@@ -23,4 +23,24 @@ async function buildDetailView(req, res, next) {
   }
 }
 
+if (!errors.isEmpty()) {
+  const classifications = await invModel.getClassifications()
+
+  res.render("inventory/add-inventory", {
+    title: "Add Vehicle",
+    classifications: classifications.rows,
+    errors: errors.array(),
+    classification_id: req.body.classification_id, // 👈 THIS
+    inv_make: req.body.inv_make,
+    inv_model: req.body.inv_model,
+    inv_year: req.body.inv_year,
+    inv_price: req.body.inv_price,
+    inv_mileage: req.body.inv_mileage,
+    inv_color: req.body.inv_color,
+    inv_description: req.body.inv_description
+  })
+  return
+}
+
+
 module.exports = { buildDetailView }
