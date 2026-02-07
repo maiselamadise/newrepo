@@ -1,7 +1,7 @@
-// 1️⃣ Requires FIRST
+// Requires FIRST
 const invModel = require("../models/inventory-model")
 
-// 2️⃣ Declare Util BEFORE using it
+// Declare Util BEFORE using it
 const Util = {}
 
 /* ****************************************
@@ -14,32 +14,39 @@ Util.handleErrors = fn => (req, res, next) => {
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
-Util.getNav = async function (req, res, next) {
-  let data = await invModel.getClassifications()
-  let list = "<ul>"
-  list += '<li><a href="/" title="Home page">Home</a></li>'
-  data.rows.forEach((row) => {
-    list += "<li>"
-    list +=
-      '<a href="/inv/type/' +
-      row.classification_id +
-      '" title="See our inventory of ' +
-      row.classification_name +
-      ' vehicles">' +
-      row.classification_name +
-      "</a>"
-    list += "</li>"
-  })
-  list += "</ul>"
-  return list
+Util.getNav = async function () {
+  try {
+    const data = await invModel.getClassifications()
+
+    let list = "<ul>"
+    list += '<li><a href="/" title="Home page">Home</a></li>'
+
+    if (data?.rows?.length) {
+      data.rows.forEach((row) => {
+        list += `<li>
+          <a href="/inv/type/${row.classification_id}"
+             title="See our inventory of ${row.classification_name} vehicles">
+             ${row.classification_name}
+          </a>
+        </li>`
+      })
+    }
+
+    list += "</ul>"
+    return list
+  } catch (error) {
+    console.error("getNav error:", error.message)
+    return "<ul><li><a href='/'>Home</a></li></ul>"
+  }
 }
+
 
 /* **************************************
  * Build the classification view HTML
  * ************************************ */
 Util.buildClassificationGrid = async function (data) {
   let grid = ""
-  if (data.length > 0) {
+  if (data && data.length > 0) {
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => {
       grid += '<li>'
