@@ -24,3 +24,9 @@ app.get("/vehicles/truck", (req, res) => {
 app.get("/account/login", (req, res) => {
   res.render("login");
 });
+
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`)
+})
