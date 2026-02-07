@@ -1,29 +1,28 @@
+/* ===============================
+   RESET
+================================ */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 /* ===============================
-   RESET
+   BASE
 ================================ */
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4f4f4;
+  color: #222;
+  line-height: 1.5;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-  padding: 0;
-}
-
-nav a {
-  text-decoration: none;
-  color: #333;
-}
-
-nav a:hover {
-  color: #007bff;
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 /* ===============================
@@ -67,8 +66,8 @@ nav a {
   padding: 0.8rem;
   text-align: center;
   color: white;
-  text-decoration: none;
   font-weight: bold;
+  text-decoration: none;
 }
 
 nav a:hover {
@@ -76,48 +75,15 @@ nav a:hover {
 }
 
 /* ===============================
-   BASE
-================================ */
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f4f4;
-  color: #222;
-  line-height: 1.5;
-  padding: 0 2rem;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1200px;
-  
-}
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
-}
-
-#hero {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 2rem;
-  background: linear-gradient(to bottom, #eee, #fff);
-}
-
-.car-image img {
-  max-width: 400px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-
-/* ===============================
-   HERO SECTION
+   HERO
 ================================ */
 #hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: center;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #eee, #fff);
   margin-bottom: 3rem;
 }
 
@@ -137,8 +103,14 @@ h1 {
   margin-bottom: 0.4rem;
 }
 
+.car-image img {
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
 /* ===============================
-   ACTION BUTTON
+   BUTTON
 ================================ */
 #actionbtn {
   margin-top: 0.8rem;
@@ -157,7 +129,7 @@ h1 {
 }
 
 /* ===============================
-   FLEX CONTENT AREA
+   FLEX CONTENT
 ================================ */
 .flex-content {
   display: grid;
@@ -204,10 +176,32 @@ h1 {
 figure {
   text-align: center;
 }
-/* ===============================
-   vehicle detail page
-================================ */
 
+.add-col {
+  width: 130px;
+  height: 130px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+
+.add-col img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+/* ===============================
+   VEHICLE DETAIL
+================================ */
 .vehicle-detail {
   display: flex;
   gap: 2rem;
@@ -234,29 +228,9 @@ figure {
   color: #1a7f37;
 }
 
-
-.add-col {
-  width: 130px;
-  height: 130px;
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-}
-
-.add-col img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-figcaption {
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
-  font-weight: bold;
-}
-
+/* ===============================
+   FOOTER
+================================ */
 footer {
   text-align: center;
   padding: 1rem 0;
@@ -269,15 +243,16 @@ footer {
    RESPONSIVE
 ================================ */
 @media (max-width: 768px) {
-  #hero {
-    grid-template-columns: 1fr;
-  }
-
+  #hero,
   .flex-content {
     grid-template-columns: 1fr;
   }
 
   .flex {
     justify-content: center;
+  }
+
+  nav ul {
+    flex-direction: column;
   }
 }
