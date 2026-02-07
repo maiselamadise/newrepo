@@ -4,6 +4,10 @@ const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities")
 
+// Inventory Management View
+router.get("/", utilities.handleErrors(invController.buildManagement))
+
+
 // Route to build inventory by classification view
 router.get(
   "/type/:classificationId",
