@@ -22,25 +22,24 @@ app.set("views", path.join(__dirname, "views"))
 
 // Routes
 app.use("/", inventoryRoute)
-app.use("/", errorRoute)
 
-// Inventory routes
+// Error handling route
 app.use("/inv", inventoryRoute)
 
 // 404 handler
 app.use(async (req, res) => {
-  res.status(404).render("error", {
+  res.status(404).render("errors/error", {
     title: "404 - Page Not Found",
     nav: await utilities.getNav(),
     message: "Sorry, we couldn't find that page.",
   })
 })
 
-// Global error handler
+// Global error handler (LAST)
 app.use(async (err, req, res, next) => {
   console.error(err.stack)
 
-  res.status(err.status || 500).render("error", {
+  res.status(err.status || 500).render("errors/error", {
     title: err.status || "Server Error",
     nav: await utilities.getNav(),
     message: err.message || "Something went wrong.",
