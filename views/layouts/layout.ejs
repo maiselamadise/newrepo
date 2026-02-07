@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../partials/head') %>
-
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
 <body>
-    <div id="wrapper">
-        <%- include('../partials/header') %>
-        <%- include('../partials/navigation') %>
-        
-        <main>
-            <%- body %>
-        </main>
 
-        <%- include('../partials/footer') %>
-    </div>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/customer">Customer</a></li>
+        <li><a href="/vehicles/sedan">Sedan</a></li>
+        <li><a href="/vehicles/suv">SUV</a></li>
+        <li><a href="/vehicles/truck">Truck</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <%- body %>
+  </main>
+
+  <script src="/js/script.js"></script>
 </body>
 </html>
