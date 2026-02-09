@@ -1,32 +1,37 @@
-<!-- Display title -->
+<!-- Page Title -->
 <% if (title) { %>
-    <h1 class="page-title"><%= title %></h1>
-    <% } %>
-    
-    <!-- Display view message -->
-    <%- messages() %>
-    
-    <!-- Display server-side validation errors -->
-    <% if (errors) { %>
-      <ul class="notice">
-        <% errors.array().forEach(error => { %>
-          <li><%= error.msg %></li>
-        <% }) %>
-      </ul>
-    <% } %>
-    
-    <div class="management-links">
-      <h2>Welcome <%= accountFirstname %>!</h2>
-    
-      <p><%= message %></p>
-    
-      <a href="/account/update/<%= accountData.account_id %>">Edit Account Information</a>
-    
-      <% if (accountType === "Admin" || accountType === "Employee") { %>
-        <h3>Inventory Management</h3>
-        <p>
-          <a href="/inv/">Manage Inventory</a>
-        </p>
-      <% } %>
-    </div>
-      
+  <h1 class="page-title"><%= title %></h1>
+<% } %>
+
+<!-- Flash Messages -->
+<%- messages() %>
+
+<!-- Validation Errors -->
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<div class="management-links">
+  <h2>Welcome <%= accountData.account_firstname %>!</h2>
+
+  <% if (message) { %>
+    <p><%= message %></p>
+  <% } %>
+
+  <p>
+    <a href="/account/update/<%= accountData.account_id %>">
+      Update Account Information
+    </a>
+  </p>
+
+  <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
+    <h3>Inventory Management</h3>
+    <p>
+      <a href="/inv/">Manage Inventory</a>
+    </p>
+  <% } %>
+</div>
