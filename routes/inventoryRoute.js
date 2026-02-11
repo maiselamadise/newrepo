@@ -25,4 +25,17 @@ router.get("/cause-error", (req, res) => {
   throw new Error("Intentional footer-based error")
 })
 
+// Add classification (REQUIRED)
+router.post(
+  "/add-classification",
+  utilities.handleErrors(invController.addClassification)
+)
+
+// Add vehicle (REQUIRED)
+router.post(
+  "/add-vehicle",
+  utilities.handleErrors(invController.addVehicle)
+)
+
+
 module.exports = router

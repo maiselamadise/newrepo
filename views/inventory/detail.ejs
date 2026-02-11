@@ -1,8 +1,12 @@
-<%- include('../partials/header') %>
+<h1><%= title %></h1>
 
-<main>
-  <h1><%= title %></h1>
-  <%- vehicleHTML %>
-</main>
+<img src="<%= vehicle.inv_image %>" alt="Vehicle image">
 
-<%- include('../partials/footer') %>
+<ul>
+  <li>Year: <%= vehicle.inv_year %></li>
+  <li>Price: $<%= vehicle.inv_price %></li>
+  <li>Mileage: <%= vehicle.inv_mileage %></li>
+  <li>Color: <%= vehicle.inv_color %></li>
+</ul>
+
+<p><%= vehicle.inv_description %></p>
