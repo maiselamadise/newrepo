@@ -1,12 +1,7 @@
+<%- nav %>
+
 <h1><%= title %></h1>
 
-<img src="<%= vehicle.inv_image %>" alt="Vehicle image">
+<%- detailHTML %>
 
-<ul>
-  <li>Year: <%= vehicle.inv_year %></li>
-  <li>Price: $<%= vehicle.inv_price %></li>
-  <li>Mileage: <%= vehicle.inv_mileage %></li>
-  <li>Color: <%= vehicle.inv_color %></li>
-</ul>
-
-<p><%= vehicle.inv_description %></p>
+<a href="/" class="back-link">Back to Home</a>

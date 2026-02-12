@@ -1,12 +1,7 @@
+<%- nav %>
+
 <h1><%= title %></h1>
 
-<ul class="vehicle-grid">
-  <% vehicles.forEach(vehicle => { %>
-    <li>
-      <a href="/inv/detail/<%= vehicle.inv_id %>">
-        <img src="<%= vehicle.inv_thumbnail %>" alt="Vehicle image">
-        <h2><%= vehicle.inv_make %> <%= vehicle.inv_model %></h2>
-      </a>
-    </li>
-  <% }) %>
-</ul>
+<%- grid %>
+
+<a href="/" class="back-link">Back to Home</a>

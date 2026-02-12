@@ -1,27 +1,57 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities")
 
+const invController = {}
+
 /* ***************************
- *  Build vehicle detail view
+ * Build inventory by classification view
  * ************************** */
-async function buildVehicleDetail(req, res, next) {
-  try {
-    const invId = Number(req.params.inv_id)
+invController.buildByClassificationId = async function (req, res, next) {
+  const classification_id = Number(req.params.classificationId)
 
-    const vehicleData = await invModel.getVehicleById(invId)
-
-    if (!vehicleData) {
-      return next({ status: 404, message: "Vehicle not found" })
-    }
-
-    const nav = await utilities.getNav()
-
-    res.render("inventory/detail", {
-      title: `${vehicleData.inv_make} ${vehicleData.inv_model}`,
-      nav,
-      vehicle: vehicleData   // 👈 PASS DATA, NOT HTML
-    })
-  } catch (error) {
-    next(error)
+  if (isNaN(classification_id)) {
+    return next({ status: 404, message: "Invalid classification ID" })
   }
+
+  const data = await invModel.getInventoryByClassificationId(classification_id)
+  const grid = await utilities.buildClassificationGrid(data)
+  const nav = await utilities.getNav()
+
+  const className = data.length
+    ? data[0].classification_name
+    : "Vehicles"
+
+  res.render("inventory/classification", {
+    title: className,
+    nav,
+    grid,
+  })
 }
+
+/* ***************************
+ * Build vehicle detail view
+ * ************************** */
+invController.buildDetailView = async function (req, res, next) {
+  const inv_id = Number(req.params.invId)
+
+  if (isNaN(inv_id)) {
+    return next({ status: 404, message: "Invalid vehicle ID" })
+  }
+
+  const vehicle = await invModel.getVehicleById(inv_id)
+
+  if (!vehicle) {
+    return next({ status: 404, message: "Vehicle not found" })
+  }
+
+  const nav = await utilities.getNav()
+  const detailHTML = utilities.buildVehicleDetail(vehicle)
+
+  res.render("inventory/detail", {
+    title: `${vehicle.inv_make} ${vehicle.inv_model}`,
+    nav,
+    detailHTML,
+  })
+}
+
+module.exports = invController
