@@ -1,6 +1,17 @@
-<%- nav %>
-
-<main class="error-page">
-  <h1><%= title %></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+</head>
+<body>
+  <h1>Error <%= status %></h1>
   <p><%= message %></p>
-</main>
+
+  <% if (nav) { %>
+    <nav><%- nav %></nav>
+  <% } %>
+
+  <a href="/">Back to Home</a>
+</body>
+</html>
