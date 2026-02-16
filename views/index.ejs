@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title><%= title %></title>
-</head>
+<%- include("./partials/header") %>
 
-<body>
-  <header>
-    <nav>
-      <%- nav %>
-    </nav>
-  </header>
+<h1>Welcome</h1>
+<p>This is the home page.</p>
 
-  <main>
-    <h1>Welcome</h1>
-    <p>This is the home page.</p>
-  </main>
-
-  <footer>
-    <p>&copy; <%= new Date().getFullYear() %></p>
-  </footer>
-</body>
-</html>
+<%- include("./partials/footer") %>
