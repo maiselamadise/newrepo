@@ -121,5 +121,5 @@ Util.buildClassificationList = async function (classification_id = null) {
     return classificationList
   }
 
-// 3️⃣ Export LAST
+// Export LAST
 module.exports = Util
