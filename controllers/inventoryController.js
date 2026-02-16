@@ -1,7 +1,18 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities")
 
-const invController = {}
+const invController = {}   // 
+
+/* ***************************
+ * Build inventory view
+ * ************************** */
+invController.buildInventory = async function (req, res) {
+  const nav = await utilities.getNav()
+  res.render("inventory/index", {
+    title: "Inventory",
+    nav,
+  })
+}
 
 /* ***************************
  * Build inventory by classification view
@@ -31,7 +42,7 @@ invController.buildByClassificationId = async function (req, res, next) {
 /* ***************************
  * Build vehicle detail view
  * ************************** */
-invController.buildDetailView = async function (req, res, next) {
+invController.buildByInvId = async function (req, res, next) {
   const inv_id = Number(req.params.invId)
 
   if (isNaN(inv_id)) {
@@ -52,6 +63,19 @@ invController.buildDetailView = async function (req, res, next) {
     nav,
     detailHTML,
   })
+}
+
+/* placeholders required by routes */
+invController.buildManagement = async function (req, res) {
+  res.send("Management works")
+}
+
+invController.buildAddClassification = async function (req, res) {
+  res.send("Add classification form")
+}
+
+invController.addClassification = async function (req, res) {
+  res.send("Classification added")
 }
 
 module.exports = invController
