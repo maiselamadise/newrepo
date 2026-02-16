@@ -39,6 +39,16 @@ invController.buildByClassificationId = async function (req, res, next) {
   })
 }
 
+invController.buildManagement = async function (req, res) {
+  const nav = await utilities.getNav()
+
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav,
+  })
+}
+
+
 /* ***************************
  * Build vehicle detail view
  * ************************** */

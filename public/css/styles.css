@@ -228,6 +228,22 @@ figcaption {
   color: #1a7f37;
 }
 
+.management-actions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.management-actions li {
+  margin: 1rem 0;
+}
+
+.management-actions a {
+  font-weight: bold;
+}
+.management-actions a:hover {
+  text-decoration: underline;
+}
+
 /* ===============================
    FOOTER
 ================================ */
