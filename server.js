@@ -50,3 +50,9 @@ const PORT = process.env.PORT || 10000
 app.listen(PORT, () => {
   console.log(`🚀 App running on port ${PORT}`)
 })
+
+const cookieParser = require("cookie-parser")
+const authMiddleware = require("./middleware/auth-middleware")
+
+app.use(cookieParser())
+app.use(authMiddleware.checkJWTToken)

@@ -1,5 +1,35 @@
-<h1><%= title %></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+</head>
 
-<%- grid %>
+<body>
+<header>
+  <nav><%- nav %></nav>
+</header>
 
-<a href="/" class="back-link">Back to Home</a>
+<main>
+  <h1><%= title %></h1>
+
+  <% if (vehicles.length === 0) { %>
+    <p>Sorry, no matching vehicles could be found.</p>
+  <% } else { %>
+    <ul class="vehicle-list">
+      <% vehicles.forEach(vehicle => { %>
+        <li>
+          <a href="/inv/detail/<%= vehicle.inv_id %>">
+            <%= vehicle.inv_make %> <%= vehicle.inv_model %>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</main>
+
+<footer>
+  <p>&copy; <%= new Date().getFullYear() %></p>
+</footer>
+</body>
+</html>

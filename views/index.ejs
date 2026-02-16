@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <title><%= title %></title>
 </head>
-<body>
 
+<body>
   <header>
-    <%- nav %>
+    <nav>
+      <%- nav %>
+    </nav>
   </header>
 
   <main>
@@ -15,5 +17,8 @@
     <p>This is the home page.</p>
   </main>
 
+  <footer>
+    <p>&copy; <%= new Date().getFullYear() %></p>
+  </footer>
 </body>
 </html>

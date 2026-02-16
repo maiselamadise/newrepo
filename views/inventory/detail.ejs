@@ -1,5 +1,26 @@
-<h1><%= title %></h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+</head>
 
-<%- detailHTML %>
+<body>
+<header>
+  <nav><%- nav %></nav>
+</header>
 
-<a href="/" class="back-link">Back to Home</a>
+<main>
+  <h1><%= vehicle.inv_make %> <%= vehicle.inv_model %></h1>
+
+  <img src="<%= vehicle.inv_image %>" alt="<%= title %>">
+
+  <p><strong>Price:</strong> $<%= vehicle.inv_price %></p>
+  <p><%= vehicle.inv_description %></p>
+</main>
+
+<footer>
+  <p>&copy; <%= new Date().getFullYear() %></p>
+</footer>
+</body>
+</html>
