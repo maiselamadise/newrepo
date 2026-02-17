@@ -1,3 +1,18 @@
 <header>
-  <%- nav %>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+
+      <% if (!loggedin) { %>
+        <li><a href="/account/login">My Account</a></li>
+      <% } else { %>
+        <li>
+          <a href="/account">
+            Welcome <%= accountData.account_firstname %>
+          </a>
+        </li>
+        <li><a href="/account/logout">Logout</a></li>
+      <% } %>
+    </ul>
+  </nav>
 </header>
