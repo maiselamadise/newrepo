@@ -1,68 +1,52 @@
-const accountModel = require("../models/accountModel")
 const bcrypt = require("bcryptjs")
+const accountModel = require("../models/account-model")
 
 async function buildManagement(req, res) {
   res.render("account/management", {
     title: "Account Management",
+    accountData: res.locals.accountData,
+    message: req.flash("notice"),
   })
 }
 
-async function buildUpdate(req, res) {
+async function buildUpdateView(req, res) {
   const account = await accountModel.getAccountById(req.params.accountId)
 
   res.render("account/update", {
     title: "Update Account",
     ...account,
+    errors: null,
+    message: null,
   })
 }
 
 async function updateAccount(req, res) {
-  const { firstname, lastname, email, account_id } = req.body
+  const { account_id, account_firstname, account_lastname, account_email } = req.body
 
-  const result = await accountModel.updateAccount(
-    firstname,
-    lastname,
-    email,
-    account_id
+  await accountModel.updateAccount(
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email
   )
 
-  if (!result) {
-    req.flash("notice", "Update failed.")
-    return res.redirect(`/account/update/${account_id}`)
-  }
-
-  const updated = await accountModel.getAccountById(account_id)
-  res.locals.accountData = updated
   req.flash("notice", "Account updated successfully.")
-  res.render("account/management", { title: "Account Management" })
+  res.redirect("/account/")
 }
 
 async function updatePassword(req, res) {
-  const hashed = await bcrypt.hash(req.body.password, 10)
+  const { account_id, account_password } = req.body
+  const hashedPassword = await bcrypt.hash(account_password, 10)
 
-  const result = await accountModel.updatePassword(
-    hashed,
-    req.body.account_id
-  )
-
-  if (!result) {
-    req.flash("notice", "Password update failed.")
-    return res.redirect(`/account/update/${req.body.account_id}`)
-  }
+  await accountModel.updatePassword(account_id, hashedPassword)
 
   req.flash("notice", "Password updated successfully.")
   res.redirect("/account/")
 }
 
-function logout(req, res) {
-  res.clearCookie("jwt")
-  res.redirect("/")
-}
-
 module.exports = {
   buildManagement,
-  buildUpdate,
+  buildUpdateView,
   updateAccount,
   updatePassword,
-  logout,
 }

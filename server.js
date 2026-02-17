@@ -1,58 +1,53 @@
-require("dotenv").config()
-const express = require("express")
-const path = require("path")
+const express = require('express');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
+const path = require('path');
 
-const app = express()
+const { setLocals } = require('./middleware/auth');
+const accountsRouter = require('./routes/accounts');
+const inventoryRouter = require('./routes/inventory');
 
-// Utilities
-const utilities = require("./utilities")
-
-// Routes
-const baseRoute = require("./routes/baseRoute")
-const inventoryRoute = require("./routes/inventoryRoute")
+const app = express();
 
 // Middleware
-app.use(express.static(path.join(__dirname, "public")))
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// View engine
-app.set("view engine", "ejs")
-app.set("views", path.join(__dirname, "views"))
+// Session setup
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
-// ===== ROUTES =====
-app.use("/", baseRoute)
-app.use("/inv", inventoryRoute)
+app.use(flash());
 
-// ===== 404 HANDLER =====
-app.use(async (req, res) => {
-  res.status(404).render("errors/error", {
-    title: "404 - Page Not Found",
-    status: 404,
-    nav: await utilities.getNav(),
-    message: "Sorry, we couldn't find that page.",
-  })
-})
+// Custom middleware
+app.use(setLocals);
 
-// ===== 500 HANDLER (LAST) =====
-app.use(async (err, req, res, next) => {
-  console.error(err.stack)
+// Static files
+app.use(express.static(path.join(__dirname, 'public')));
 
-  res.status(err.status || 500).render("errors/error", {
-    title: err.status || "Server Error",
-    status: err.status || 500,
-    nav: await utilities.getNav(),
-    message: err.message || "Something went wrong.",
-  })
-})
+// Routers
+app.use('/account', accountsRouter);
+app.use('/inventory', inventoryRouter);
 
-// Server
-const PORT = process.env.PORT || 10000
+// Home route
+app.get('/', (req, res) => {
+  res.render('index', { title: 'Home' });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+// Start server
+const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
-  console.log(`🚀 App running on port ${PORT}`)
-})
-
-const cookieParser = require("cookie-parser")
-const authMiddleware = require("./middleware/auth-middleware")
-
-app.use(cookieParser())
-app.use(authMiddleware.checkJWTToken)
+  console.log(`App listening on http://localhost:${PORT}`);
+});

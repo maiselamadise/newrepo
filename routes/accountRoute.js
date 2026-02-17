@@ -1,11 +1,20 @@
 const express = require("express")
 const router = express.Router()
 const accountController = require("../controllers/accountController")
+const { checkJWTToken } = require("../utilities/auth")
 const validate = require("../utilities/account-validation")
 
-router.get("/", accountController.buildManagement)
+router.get(
+  "/",
+  checkJWTToken,
+  accountController.buildManagement
+)
 
-router.get("/update/:accountId", accountController.buildUpdate)
+router.get(
+  "/update/:accountId",
+  checkJWTToken,
+  accountController.buildUpdateView
+)
 
 router.post(
   "/update",
@@ -15,12 +24,15 @@ router.post(
 )
 
 router.post(
-  "/update-password",
+  "/password",
   validate.passwordRules(),
-  validate.checkPassword,
+  validate.checkPasswordData,
   accountController.updatePassword
 )
 
-router.get("/logout", accountController.logout)
+router.get("/logout", (req, res) => {
+  res.clearCookie("jwt")
+  res.redirect("/")
+})
 
 module.exports = router

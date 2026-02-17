@@ -1,47 +1,46 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities")
 
-async function buildByClassificationId(req, res, next) {
-  const classificationId = Number(req.params.classificationId)
-  const data = await invModel.getInventoryByClassificationId(classificationId)
+/* ***************************
+ * Inventory Management View
+ * *************************** */
+async function buildManagement(req, res) {
+  const data = await invModel.getInventoryManagement()
 
-  const nav = await utilities.getNav()
-  const className = data[0]?.classification_name || "Vehicles"
-
-  res.render("inventory/classification", {
-    title: className,
-    nav,
-    vehicles: data
-  })
-}
-
-async function buildDetailView(req, res, next) {
-  const invId = Number(req.params.invId)
-  const vehicle = await invModel.getVehicleById(invId)
-
-  if (!vehicle) {
-    return next({ status: 404, message: "Vehicle not found" })
-  }
-
-  const nav = await utilities.getNav()
-
-  res.render("inventory/detail", {
-    title: `${vehicle.inv_make} ${vehicle.inv_model}`,
-    nav,
-    vehicle
-  })
-}
-
-async function buildManagementView(req, res) {
-  const nav = await utilities.getNav()
   res.render("inventory/management", {
     title: "Inventory Management",
-    nav
+    data,
+  })
+}
+
+/* ***************************
+ * Inventory by Classification (PUBLIC)
+ * *************************** */
+async function buildByClassification(req, res) {
+  const classificationId = req.params.classificationId
+  const data = await invModel.getInventoryByClassificationId(classificationId)
+
+  res.render("inventory/classification", {
+    title: data[0].classification_name,
+    data,
+  })
+}
+
+/* ***************************
+ * Inventory Detail View (PUBLIC)
+ * *************************** */
+async function buildDetail(req, res) {
+  const invId = req.params.invId
+  const data = await invModel.getInventoryById(invId)
+
+  res.render("inventory/detail", {
+    title: `${data.inv_make} ${data.inv_model}`,
+    data,
   })
 }
 
 module.exports = {
-  buildByClassificationId,
-  buildDetailView,
-  buildManagementView
+  buildManagement,
+  buildByClassification,
+  buildDetail,
 }

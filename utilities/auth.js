@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 
-function checkLogin(req, res, next) {
+function checkJWTToken(req, res, next) {
   const token = req.cookies.jwt
 
   if (!token) {
@@ -14,9 +14,26 @@ function checkLogin(req, res, next) {
     res.locals.accountData = decoded
     next()
   } catch (err) {
+    res.clearCookie("jwt")
     res.locals.loggedin = false
     next()
   }
 }
 
-module.exports = checkLogin
+function checkEmployeeOrAdmin(req, res, next) {
+  if (
+    res.locals.loggedin &&
+    (res.locals.accountData.account_type === "Employee" ||
+     res.locals.accountData.account_type === "Admin")
+  ) {
+    return next()
+  }
+
+  req.flash("notice", "Please log in with appropriate privileges.")
+  res.render("account/login", { title: "Login" })
+}
+
+module.exports = {
+  checkJWTToken,
+  checkEmployeeOrAdmin,
+}

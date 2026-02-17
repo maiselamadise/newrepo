@@ -1,11 +1,9 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities")
 
-const invController = {}   // 
+const invController = {}
 
-/* ***************************
- * Build inventory view
- * ************************** */
+/* Inventory home */
 invController.buildInventory = async function (req, res) {
   const nav = await utilities.getNav()
   res.render("inventory/index", {
@@ -14,9 +12,7 @@ invController.buildInventory = async function (req, res) {
   })
 }
 
-/* ***************************
- * Build inventory by classification view
- * ************************** */
+/* Inventory by classification */
 invController.buildByClassificationId = async function (req, res, next) {
   const classification_id = Number(req.params.classificationId)
 
@@ -39,19 +35,26 @@ invController.buildByClassificationId = async function (req, res, next) {
   })
 }
 
+/* Inventory management */
 invController.buildManagement = async function (req, res) {
   const nav = await utilities.getNav()
-
   res.render("inventory/management", {
     title: "Inventory Management",
     nav,
   })
 }
 
+/* Add classification form */
+invController.buildAddClassification = async function (req, res) {
+  const nav = await utilities.getNav()
+  res.render("inventory/add-classification", {
+    title: "Add Classification",
+    nav,
+    errors: null,
+  })
+}
 
-/* ***************************
- * Build vehicle detail view
- * ************************** */
+/* Vehicle detail */
 invController.buildByInvId = async function (req, res, next) {
   const inv_id = Number(req.params.invId)
 
@@ -75,15 +78,7 @@ invController.buildByInvId = async function (req, res, next) {
   })
 }
 
-/* placeholders required by routes */
-invController.buildManagement = async function (req, res) {
-  res.send("Management works")
-}
-
-invController.buildAddClassification = async function (req, res) {
-  res.send("Add classification form")
-}
-
+/* Add classification POST */
 invController.addClassification = async function (req, res) {
   res.send("Classification added")
 }
