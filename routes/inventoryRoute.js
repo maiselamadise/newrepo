@@ -1,18 +1,14 @@
 const express = require("express")
 const router = express.Router()
-
 const invController = require("../controllers/invController")
-const utilities = require("../utilities")
-const { checkEmployeeOrAdmin } = require("../middleware/account-middleware")
+const authorizeEmployee = require("../utilities/authorize")
 
-router.get(
-  "/",
-  utilities.checkJWTToken,
-  checkEmployeeOrAdmin,
-  invController.buildManagement
-)
+router.get("/", authorizeEmployee, invController.buildManagement)
+router.get("/add-classification", authorizeEmployee, invController.buildAddClassification)
+router.post("/add-classification", authorizeEmployee, invController.addClassification)
 
-router.get("/type/:classificationId", invController.buildByClassification)
-router.get("/detail/:invId", invController.buildDetail)
+// 🚧 Not implemented yet
+// router.get("/add-inventory", authorizeEmployee, invController.buildAddInventory)
+// router.post("/add-inventory", authorizeEmployee, invController.addInventory)
 
 module.exports = router

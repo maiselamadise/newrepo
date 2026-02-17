@@ -8,32 +8,16 @@ function checkJWTToken(req, res, next) {
     return next()
   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, accountData) => {
+    if (err) {
+      res.locals.loggedin = false
+      return next()
+    }
+
     res.locals.loggedin = true
-    res.locals.accountData = decoded
+    res.locals.accountData = accountData
     next()
-  } catch (err) {
-    res.clearCookie("jwt")
-    res.locals.loggedin = false
-    next()
-  }
+  })
 }
 
-function checkEmployeeOrAdmin(req, res, next) {
-  if (
-    res.locals.loggedin &&
-    (res.locals.accountData.account_type === "Employee" ||
-     res.locals.accountData.account_type === "Admin")
-  ) {
-    return next()
-  }
-
-  req.flash("notice", "Please log in with appropriate privileges.")
-  res.render("account/login", { title: "Login" })
-}
-
-module.exports = {
-  checkJWTToken,
-  checkEmployeeOrAdmin,
-}
+module.exports = checkJWTToken

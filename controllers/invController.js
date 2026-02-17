@@ -1,46 +1,93 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities")
 
-/* ***************************
- * Inventory Management View
- * *************************** */
-async function buildManagement(req, res) {
-  const data = await invModel.getInventoryManagement()
+// ✅ DEFINE CONTROLLER FIRST
+const invController = {}
 
-  res.render("inventory/management", {
-    title: "Inventory Management",
-    data,
+/* ***************************
+ * Inventory Home
+ * *************************** */
+invController.buildInventory = async function (req, res) {
+  const nav = await utilities.getNav()
+  res.render("inventory/index", {
+    title: "Inventory",
+    nav,
   })
 }
 
 /* ***************************
- * Inventory by Classification (PUBLIC)
+ * Inventory by Classification
  * *************************** */
-async function buildByClassification(req, res) {
-  const classificationId = req.params.classificationId
-  const data = await invModel.getInventoryByClassificationId(classificationId)
+invController.buildByClassificationId = async function (req, res, next) {
+  const classification_id = Number(req.params.classificationId)
+
+  if (isNaN(classification_id)) {
+    return next({ status: 404, message: "Invalid classification ID" })
+  }
+
+  const data = await invModel.getInventoryByClassificationId(classification_id)
+  const grid = await utilities.buildClassificationGrid(data)
+  const nav = await utilities.getNav()
+
+  const className = data.length
+    ? data[0].classification_name
+    : "Vehicles"
 
   res.render("inventory/classification", {
-    title: data[0].classification_name,
-    data,
+    title: className,
+    nav,
+    grid,
   })
 }
 
 /* ***************************
- * Inventory Detail View (PUBLIC)
+ * Inventory Management
  * *************************** */
-async function buildDetail(req, res) {
-  const invId = req.params.invId
-  const data = await invModel.getInventoryById(invId)
-
-  res.render("inventory/detail", {
-    title: `${data.inv_make} ${data.inv_model}`,
-    data,
+invController.buildManagement = async function (req, res) {
+  const nav = await utilities.getNav()
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav,
   })
 }
 
-module.exports = {
-  buildManagement,
-  buildByClassification,
-  buildDetail,
+/* ***************************
+ * Add Classification (GET)
+ * *************************** */
+invController.buildAddClassification = async function (req, res) {
+  const nav = await utilities.getNav()
+  res.render("inventory/add-classification", {
+    title: "Add Classification",
+    nav,
+    errors: null,
+  })
 }
+
+/* ***************************
+ * Add Classification (POST)
+ * *************************** */
+invController.addClassification = async function (req, res) {
+  res.send("Classification added")
+}
+
+/* ***************************
+ * Add Inventory (GET)
+ * *************************** */
+invController.buildAddInventory = async function (req, res) {
+  const nav = await utilities.getNav()
+  res.render("inventory/add-inventory", {
+    title: "Add Inventory",
+    nav,
+    errors: null,
+  })
+}
+
+/* ***************************
+ * Add Inventory (POST)
+ * *************************** */
+invController.addInventory = async function (req, res) {
+  res.send("Inventory item added")
+}
+
+// ✅ EXPORT ONCE, AT THE END
+module.exports = invController

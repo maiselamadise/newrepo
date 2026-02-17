@@ -1,53 +1,98 @@
-const express = require('express');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const flash = require('connect-flash');
-const path = require('path');
+/* *****************************
+ *  Required packages
+ * **************************** */
+require("dotenv").config()
+const express = require("express")
+const path = require("path")
+const session = require("express-session")
+const cookieParser = require("cookie-parser")
+const flash = require("connect-flash")
 
-const { setLocals } = require('./middleware/auth');
-const accountsRouter = require('./routes/accounts');
-const inventoryRouter = require('./routes/inventory');
+/* *****************************
+ *  App setup
+ * **************************** */
+const app = express()
 
-const app = express();
+/* *****************************
+ *  Middleware imports
+ * **************************** */
+const checkJWTToken = require("./utilities/auth")
+const { setLocals } = require("./middleware/auth")
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+/* *****************************
+ *  Routes
+ * **************************** */
+const accountsRouter = require("./routes/accounts")
+const inventoryRouter = require("./routes/inventoryRoute")
 
-// Session setup
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}));
+/* *****************************
+ *  View engine (THIS FIXES YOUR ERROR)
+ * **************************** */
+app.set("view engine", "ejs")
+app.set("views", path.join(__dirname, "views"))
 
-app.use(flash());
+/* *****************************
+ *  Global middleware
+ * **************************** */
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 
-// Custom middleware
-app.use(setLocals);
+/* *****************************
+ *  Session setup
+ * **************************** */
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+)
 
-// Static files
-app.use(express.static(path.join(__dirname, 'public')));
+/* *****************************
+ *  JWT + locals middleware (ORDER MATTERS)
+ * **************************** */
+app.use(checkJWTToken)
+app.use(flash())
+app.use(setLocals)
 
-// Routers
-app.use('/account', accountsRouter);
-app.use('/inventory', inventoryRouter);
+/* *****************************
+ *  Static files
+ * **************************** */
+app.use(express.static(path.join(__dirname, "public")))
 
-// Home route
-app.get('/', (req, res) => {
-  res.render('index', { title: 'Home' });
-});
+/* *****************************
+ *  Routes
+ * **************************** */
+app.use("/account", accountsRouter)
+app.use("/inventory", inventoryRouter)
 
-// Error handler
+/* *****************************
+ *  Home route
+ * **************************** */
+app.get("/", async (req, res) => {
+  res.render("index", { title: "Home" })
+})
+
+/* *****************************
+ *  404 handler
+ * **************************** */
+app.use((req, res) => {
+  res.status(404).render("errors/404", { title: "404 Not Found" })
+})
+
+/* *****************************
+ *  Server error handler
+ * **************************** */
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
+  console.error(err.stack)
+  res.status(500).render("errors/500", { title: "Server Error" })
+})
 
-// Start server
-const PORT = process.env.PORT || 5500;
+/* *****************************
+ *  Start server
+ * **************************** */
+const PORT = process.env.PORT || 5500
 app.listen(PORT, () => {
-  console.log(`App listening on http://localhost:${PORT}`);
-});
+  console.log(`App listening on http://localhost:${PORT}`)
+})
